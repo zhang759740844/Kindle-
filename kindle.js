@@ -70,13 +70,15 @@ objReadline.on('line', (line) => {
 })
 
 objReadline.on('close', () => {
+  if (!fs.existsSync('./读书笔记')) {
+    fs.mkdirSync('./读书笔记')
+  }
   bookMap.forEach(item => {
     if (item.bookName.indexOf('您的剪贴') !== -1) return
     item.bookName = item.bookName.slice(1)
     console.log(item.bookName)
     /// 初始化write stream
     let ws = fs.createWriteStream(`./读书笔记/${item.bookName}.txt`)
-    fs.mkdir('读书笔记', () => {})
     ws.write(`# ${item.bookName}\r\n\r\n`)
     ws.write(`#读书笔记\r\n\r\n`)
     /// 笔记列表
